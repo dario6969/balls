@@ -312,6 +312,7 @@ pcall(function()
             end
             player.Character:SetPrimaryPartCFrame(cframe)
             local sp = player.Character.HumanoidRootPart.Position
+            local sc = Vector3.new(5753.588, 321.882, 624.767)
             wait()wait()
             local foundtrinketincr = false
         
@@ -324,7 +325,7 @@ pcall(function()
                     for i,v in pairs(workspace:GetChildren())do
                         if v:IsA("Part")then
                             if v:FindFirstChildOfClass("ClickDetector")then
-                                if (v.Position-sp).Magnitude<80 then
+                                if (v.Position-sc).Magnitude<80 then
                                     foundtrinketincr = true
                                     break
                                 end
@@ -373,7 +374,7 @@ pcall(function()
                 for i,v in pairs(workspace:GetChildren())do
                     if v:IsA("Part")then
                         if v:FindFirstChildOfClass("ClickDetector")then
-                            if (v.Position-sp).Magnitude<80 then
+                            if (v.Position-sc).Magnitude<80 then
                                 foundtrinketincr = true
                             end
                         end
@@ -448,7 +449,7 @@ pcall(function()
                 end
                 if v:IsA("Part")then
                     if v:FindFirstChildOfClass("ClickDetector")then
-                        if (v.Position-sp).Magnitude<80 then
+                        if (v.Position-sc).Magnitude<80 then
                             spawn(check)
                             if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
                                 fireclickdetector(v.ClickDetector)
