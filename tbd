@@ -324,7 +324,7 @@ pcall(function()
                     for i,v in pairs(workspace:GetChildren())do
                         if v:IsA("Part")then
                             if v:FindFirstChildOfClass("ClickDetector")then
-                                if (v.Position-sp).Magnitude<200 then
+                                if (v.Position-sp).Magnitude<80 then
                                     foundtrinketincr = true
                                     break
                                 end
@@ -373,7 +373,7 @@ pcall(function()
                 for i,v in pairs(workspace:GetChildren())do
                     if v:IsA("Part")then
                         if v:FindFirstChildOfClass("ClickDetector")then
-                            if (v.Position-sp).Magnitude<200 then
+                            if (v.Position-sp).Magnitude<80 then
                                 foundtrinketincr = true
                             end
                         end
@@ -448,24 +448,16 @@ pcall(function()
                 end
                 if v:IsA("Part")then
                     if v:FindFirstChildOfClass("ClickDetector")then
-                        if (v.Position-sp).Magnitude<250 then
-                            local skip = false
-                            for a,b in pairs(ignorelist)do
-                                if (b.Position-v.Position)<2 then
-                                    skip = true
-                                end
-                            end
-                            if not skip then
-                                spawn(check)
-                                if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
-                                    fireclickdetector(v.ClickDetector)
-                                    wait(0.1)
-                                else
-                                    player.Character:SetPrimaryPartCFrame(v.CFrame)
-                                    wait(0.15)
-                                    fireclickdetector(v.ClickDetector)
-                                    wait(0.05)
-                                end
+                        if (v.Position-sp).Magnitude<80 then
+                            spawn(check)
+                            if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
+                                fireclickdetector(v.ClickDetector)
+                                wait(0.1)
+                            else
+                                player.Character:SetPrimaryPartCFrame(v.CFrame)
+                                wait(0.15)
+                                fireclickdetector(v.ClickDetector)
+                                wait(0.05)
                             end
                         end
                     end
