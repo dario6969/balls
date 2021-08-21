@@ -694,6 +694,12 @@ pcall(function()
     Other:NewTextBox("Delete from Character","TextboxInfo",function(txt)
         if Player.Character:FindFirstChild(txt)then
             Player.Character:FindFirstChild(txt):Destroy()
+        else
+            local tool = Player.Backpack:FindFirstChild(txt)
+            if tool then
+                Player.Character.Humanoid:EquipTool(tool)
+                tool:Destroy()
+            end
         end
     end)
 
