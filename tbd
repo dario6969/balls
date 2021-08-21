@@ -324,7 +324,7 @@ pcall(function()
                     for i,v in pairs(workspace:GetChildren())do
                         if v:IsA("Part")then
                             if v:FindFirstChildOfClass("ClickDetector")then
-                                if (v.Position-sp).Magnitude<250 then
+                                if (v.Position-sp).Magnitude<200 then
                                     foundtrinketincr = true
                                     break
                                 end
@@ -373,7 +373,7 @@ pcall(function()
                 for i,v in pairs(workspace:GetChildren())do
                     if v:IsA("Part")then
                         if v:FindFirstChildOfClass("ClickDetector")then
-                            if (v.Position-sp).Magnitude<250 then
+                            if (v.Position-sp).Magnitude<200 then
                                 foundtrinketincr = true
                             end
                         end
@@ -737,7 +737,6 @@ pcall(function()
     end)
 
     Keybinds:NewKeybind("Walkspeed", "KeybindInfo", Enum.KeyCode.C, function()
-        if nokeybinds then return end
         if Walkspeed then
             walkspeedtoggle:UpdateToggle("Walkspeed",false)
         else
