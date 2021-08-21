@@ -2,7 +2,7 @@ pcall(function()
     if _G.Executed then
         game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = "bruh",
-            Text = "you already executed the script retard",
+            Text = "you already executed the script retard!!",
             Duration = 5,
             Button1 = ""
         })
@@ -16,6 +16,7 @@ pcall(function()
     end
 
     _G.Executed = true
+    local bruh = true
     
     local Library = loadstring(game:HttpGet("https://pastebin.com/raw/QsWfESYB"))()
     local Window = Library.CreateLib("TBD")
@@ -47,6 +48,18 @@ pcall(function()
     local Player = game.Players.LocalPlayer
 
     local PlayerJoined = false
+
+    function deletetool(txt)
+        if Player.Character:FindFirstChild(txt)then
+            Player.Character:FindFirstChild(txt):Destroy()
+        else
+            local tool = Player.Backpack:FindFirstChild(txt)
+            if tool then
+                Player.Character.Humanoid:EquipTool(tool)
+                tool:Destroy()
+            end
+        end
+    end
 
     local Illutable = {}
 
@@ -91,6 +104,9 @@ pcall(function()
         end
         
         game.Players.PlayerAdded:Connect(function(v)
+            if not Window then
+                return
+            end
             PlayerJoined = true
             StarterGui:SetCore("SendNotification", {
                 Title = "Player Joined",
@@ -105,6 +121,9 @@ pcall(function()
             end
         end)
         game.Players.PlayerRemoving:Connect(function(v)
+            if not Window then
+                return
+            end
             StarterGui:SetCore("SendNotification", {
                 Title = "Player Left",
                 Text = v.Name,
@@ -400,24 +419,6 @@ pcall(function()
                 _G.CastleRock = false
                 return
             end
-            local ignorelist = {}
-            for i,v in pairs(workspace.CRLoot:GetChildren())do
-                if droppd then
-                    if v.Name:find("Phoenix")then
-                        table.insert(ignorelist,v)
-                    end
-                end
-                if dropice then
-                    if v.Name:find("Ice")then
-                        table.insert(ignorelist,v)
-                    end
-                end
-                if droptelorum then
-                    if v.Name:find("Telorum")then
-                        table.insert(ignorelist,v)
-                    end
-                end
-            end
             function check()
                 for i,v in pairs(workspace:GetChildren())do
                     if v:IsA("Part")then
@@ -457,13 +458,22 @@ pcall(function()
             end
             check()
             wait(0.05)
+            if droppd then
+                deletetool("Phoenix Down")
+            end
+            if dropice then
+                deletetool("Ice Essence")
+            end
+            if droptelorum then
+                deletetool("Scroll of Telorum")
+            end
             player.Character:SetPrimaryPartCFrame(cf)
             wait()
             _G.CastleRock = false
         end
     end)
 
-    local droptelorumtoggle = CRO:NewToggle("Drop Telorum", "ToggleInfo",function(state)
+    local droptelorumtoggle = CRO:NewToggle("Delete Telorum", "ToggleInfo",function(state)
         if state then
             droptelorum = true
         else
@@ -471,7 +481,7 @@ pcall(function()
         end
     end)
 
-    local dropicetoggle = CRO:NewToggle("Drop Ice Essence", "ToggleInfo",function(state)
+    local dropicetoggle = CRO:NewToggle("Delete Ice Essence", "ToggleInfo",function(state)
         if state then
             dropice = true
         else
@@ -479,7 +489,7 @@ pcall(function()
         end
     end)
 
-    local droppdtoggle = CRO:NewToggle("Drop Phoenix Down", "ToggleInfo",function(state)
+    local droppdtoggle = CRO:NewToggle("Delete Phoenix Down", "ToggleInfo",function(state)
         if state then
             droppd = true
         else
@@ -518,6 +528,9 @@ pcall(function()
     -- Artifact Teleport/Notifier
 
     local function TrinketAdded(Trinket)
+        if not Window then
+            return
+        end
         local name = string.lower(Trinket.Name)
         if not name:find("spawn")then
             if not name:find("medal")and not name:find("old")and not name:find("coin")and not name:find("gold")
@@ -690,17 +703,9 @@ pcall(function()
             end
         end
     end)
-
+    
     Other:NewTextBox("Delete from Character","TextboxInfo",function(txt)
-        if Player.Character:FindFirstChild(txt)then
-            Player.Character:FindFirstChild(txt):Destroy()
-        else
-            local tool = Player.Backpack:FindFirstChild(txt)
-            if tool then
-                Player.Character.Humanoid:EquipTool(tool)
-                tool:Destroy()
-            end
-        end
+        deletetool(txt)
     end)
 
     -- Teleports
