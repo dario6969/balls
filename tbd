@@ -428,6 +428,15 @@ pcall(function()
                         end
                     end
                 end
+                if droppd then
+                    deletetool("Phoenix Down")
+                end
+                if dropice then
+                    deletetool("Ice Essence")
+                end
+                if droptelorum then
+                    deletetool("Scroll of Telorum")
+                end
             end
             for i,v in pairs(workspace:GetChildren())do
                 if _G.PlayerJoined == true then
@@ -456,15 +465,6 @@ pcall(function()
             end
             check()
             wait(0.05)
-            if droppd then
-                deletetool("Phoenix Down")
-            end
-            if dropice then
-                deletetool("Ice Essence")
-            end
-            if droptelorum then
-                deletetool("Scroll of Telorum")
-            end
             player.Character:SetPrimaryPartCFrame(cf)
             wait()
             _G.CastleRock = false
