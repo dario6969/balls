@@ -46,9 +46,7 @@ pcall(function()
     local IsKeyDown = UserInputService.IsKeyDown
     local FindFirstChild = game.FindFirstChild
     local Player = game.Players.LocalPlayer
-
-    local PlayerJoined = false
-
+    
     function deletetool(txt)
         if Player.Character:FindFirstChild(txt)then
             Player.Character:FindFirstChild(txt):Destroy()
@@ -107,7 +105,7 @@ pcall(function()
             if not Window then
                 return
             end
-            PlayerJoined = true
+            _G.PlayerJoined = true
             StarterGui:SetCore("SendNotification", {
                 Title = "Player Joined",
                 Text = v.Name,
@@ -115,7 +113,7 @@ pcall(function()
                 Button1 = ""
             })
             wait(3)
-            PlayerJoined = false
+            _G.PlayerJoined = false
             if v:FindFirstChild("Backpack"):FindFirstChild("Observe")then
                 illufunction(v)
             end
@@ -130,7 +128,7 @@ pcall(function()
                 Duration = 15,
                 Button1 = ""
             })
-            PlayerJoined = false
+            _G.PlayerJoined = false
             if table.find(Illutable,v)then
                 table.remove(Illutable,v)
             end
@@ -208,7 +206,7 @@ pcall(function()
                 local playertooclose = false
                 local cf = Player.Character.HumanoidRootPart.CFrame
                 for i,v in pairs(workspace.Ingredients:GetChildren())do
-                    if PlayerJoined == true then
+                    if _G.PlayerJoined == true then
                         Bot = false
                         break
                     end
@@ -253,7 +251,7 @@ pcall(function()
                 Bot = true
                 local cf = Player.Character.HumanoidRootPart.CFrame
                 for i,v in pairs(workspace:GetChildren())do
-                    if PlayerJoined == true then
+                    if _G.PlayerJoined == true then
                         Bot = false
                         break
                     end
@@ -315,8 +313,8 @@ pcall(function()
                 player.Character:SetPrimaryPartCFrame(CFrame.new(4774.75, 531.45, 469.998))
             end
             local starttick = tick()
-            repeat wait()until workspace.InCR:FindFirstChild(player.Name)or tick()-starttick>5 or PlayerJoined == true
-            if PlayerJoined == true then
+            repeat wait()until workspace.InCR:FindFirstChild(player.Name)or tick()-starttick>5 or _G.PlayerJoined == true
+            if _G.PlayerJoined == true then
                 wait(0.05)
                 player.Character:SetPrimaryPartCFrame(cf)
                 wait(5)
@@ -336,7 +334,7 @@ pcall(function()
         
             local function spawntrinkets()
                 for i = 1,2 do
-                    if PlayerJoined == true then
+                    if _G.PlayerJoined == true then
                         _G.CastleRock = false
                         break
                     end
@@ -364,7 +362,7 @@ pcall(function()
         
             wait(0.6)
         
-            if PlayerJoined == true then
+            if _G.PlayerJoined == true then
                 wait(0.05)
                 player.Character:SetPrimaryPartCFrame(cf)
                 wait(5)
@@ -382,7 +380,7 @@ pcall(function()
             local starttick = tick()
             repeat
                 wait(0.3)
-                if PlayerJoined == true then
+                if _G.PlayerJoined == true then
                     wait(0.05)
                     player.Character:SetPrimaryPartCFrame(cf)
                     wait(1)
@@ -398,8 +396,8 @@ pcall(function()
                         end
                     end
                 end
-            until foundtrinketincr == true or PlayerJoined == true or tick()-starttick>3
-            if PlayerJoined == true then
+            until foundtrinketincr == true or _G.PlayerJoined == true or tick()-starttick>3
+            if _G.PlayerJoined == true then
                 wait(0.05)
                 player.Character:SetPrimaryPartCFrame(cf)
                 wait(1)
@@ -432,7 +430,7 @@ pcall(function()
                 end
             end
             for i,v in pairs(workspace:GetChildren())do
-                if PlayerJoined == true then
+                if _G.PlayerJoined == true then
                     wait(0.05)
                     player.Character:SetPrimaryPartCFrame(cf)
                     wait(1)
@@ -662,45 +660,49 @@ pcall(function()
         end
     end)
 
-    Other:NewButton("Print artifacts in server","ButtonInfo",function()
-        for i,v in pairs(workspace.Trinkets:GetChildren())do
-            local str = string.lower(v.Name)
-            if not str:find("spawn")then
-                local no = false
-                if str:find("scroll")then
-                    no = true
-                elseif str:find("medal")then
-                    no = true
-                elseif str:find("old")then
-                    no = true
-                elseif str:find("coin")then
-                    no = true
-                elseif str:find("gold")then
-                    no = true
-                elseif str:find("goblet")then
-                    no = true
-                elseif str:find("amulet")then
-                    no = true
-                elseif str:find("opal")then
-                    no = true
-                elseif str:find("sap")then
-                    no = true
-                elseif str:find("ruby")then
-                    no = true
-                elseif str:find("emer")then
-                    no = true
-                elseif str:find("diam")then
-                    no = true
-                elseif str:find("ame")then
-                    no = true
-                elseif str:find("???")then
-                    no = true
-                else
+    Other:NewButton("Scroom and Lava Flower Farm","ButtonInfo",function()
+        if Bot then return end
+        if not Bot then
+            spawn(function()
+                Bot = true
+                local playertooclose = false
+                local cf = Player.Character.HumanoidRootPart.CFrame
+                for i,v in pairs(workspace.Ingredients:GetChildren())do
+                    if _G.PlayerJoined == true then
+                        Bot = false
+                        break
+                    end
+                    if v.Name == "Scroom"or v.Name == "Lava Flower"then
+                        if v.Ready.Value == true then
+                            if v:FindFirstChild("ClickDetector")then
+                                for a,p in pairs(game.Players:GetChildren())do
+                                    if p~=Player then
+                                        if p.Character:FindFirstChild("HumanoidRootPart")then
+                                            if (p.Character.HumanoidRootPart.Position-v.Position).Magnitude<600 then
+                                                playertooclose = true
+                                            end
+                                        end
+                                    end
+                                end
+                                if not playertooclose then
+                                    if (v.Position-Player.Character.HumanoidRootPart.Position).Magnitude<10 then
+                                        fireclickdetector(v.ClickDetector)
+                                    else
+                                        Player.Character:SetPrimaryPartCFrame(v.CFrame)
+                                        wait(0.125)
+                                        fireclickdetector(v.ClickDetector)
+                                        wait()
+                                    end
+                                end
+                            end
+                        end
+                    end
                 end
-                if not no then
-                    print(v.Name)
-                end
-            end
+                wait()
+                Player.Character:SetPrimaryPartCFrame(cf)
+                wait(1)
+                Bot = false
+            end)
         end
     end)
     
