@@ -48,17 +48,43 @@ pcall(function()
     local Player = game.Players.LocalPlayer
     
     function deletetool(txt)
-        if Player.Character:FindFirstChild(txt)then
-            Player.Character:FindFirstChild(txt):Destroy()
-        else
-            local tool = Player.Backpack:FindFirstChild(txt)
-            if tool then
-                Player.Character.Humanoid:EquipTool(tool)
-                tool:Destroy()
+        local ins = string.lower(txt)
+        if ins:find("?")then
+            local questionmark = Player.Character:FindFirstChild("???") or Player.Backpack:FindFirstChild("???")
+            if questionmark then
+                if questionmark.Parent == Player.Backpack then
+                    Player.Character.Humanoid:EquipTool(questionmark)
+                    wait()
+                end
+                questionmark:Destroy()
+                return
+            end
+        end
+        for _,v in pairs(Player.Character:GetChildren())do
+            if string.lower(v.Name):find(ins)then
+                v:Destroy()
+            end
+        end
+        for _,v in pairs(Player.Backpack:GetChildren())do
+            if string.lower(v.Name):find(ins)then
+                Player.Character.Humanoid:EquipTool(v)
+                repeat wait()until Player.Character:FindFirstChild(v.Name)
+                v:Destroy()
+                wait()
             end
         end
     end
 
+    local ppp = game.Players:GetPlayers()
+    if #ppp > 1 then
+        StarterGui:SetCore("SendNotification", {
+            Title = "TBD GUI",
+            Text = "There are "..#ppp.." players ingame",
+            Duration = 5,
+            Button1 = ""
+        })
+    end
+    
     local Illutable = {}
 
     -- Illu Check
@@ -295,6 +321,7 @@ pcall(function()
 
     local droppd = false
     local dropice = false
+    local dropscrolls = false
     local droptelorum = false
     
     CR:NewButton("Castlerock Bot","ButtonInfo",function()
@@ -333,7 +360,7 @@ pcall(function()
             local foundtrinketincr = false
         
             local function spawntrinkets()
-                for i = 1,2 do
+                for i = 1,1 do
                     if _G.PlayerJoined == true then
                         _G.CastleRock = false
                         break
@@ -353,6 +380,19 @@ pcall(function()
                     end
                     player.Character:SetPrimaryPartCFrame(workspace.TeleportIn.CFrame*CFrame.new(0,20,0)*CFrame.Angles(0,math.rad(90),0))
                     wait(1)
+                    for i,v in pairs(workspace:GetChildren())do
+                        if v:IsA("Part")then
+                            if v:FindFirstChildOfClass("ClickDetector")then
+                                if (v.Position-sc).Magnitude<50 then
+                                    foundtrinketincr = true
+                                    break
+                                end
+                            end
+                        end
+                    end
+                    if foundtrinketincr == true then
+                        break
+                    end
                     player.Character:SetPrimaryPartCFrame(cframe)
                     wait(0.5)
                 end
@@ -396,7 +436,7 @@ pcall(function()
                         end
                     end
                 end
-            until foundtrinketincr == true or _G.PlayerJoined == true or tick()-starttick>3
+            until foundtrinketincr == true or _G.PlayerJoined == true or tick()-starttick>1.25
             if _G.PlayerJoined == true then
                 wait(0.05)
                 player.Character:SetPrimaryPartCFrame(cf)
@@ -404,7 +444,7 @@ pcall(function()
                 _G.CastleRock = false
                 return
             end
-            if tick()-starttick>3 then
+            if tick()-starttick>1.25 then
                 wait(0.05)
                 player.Character:SetPrimaryPartCFrame(cf)
                 StarterGui:SetCore("SendNotification", {
@@ -437,7 +477,18 @@ pcall(function()
                 if droptelorum then
                     deletetool("Scroll of Telorum")
                 end
+                if dropscrolls then
+                    deletetool("Scroll")
+                    deletetool("?")
+                    deletetool("opal")
+                    deletetool("old ring")
+                    deletetool("goblet")
+                    deletetool("amulet")
+                    deletetool("sapp")
+                    deletetool("ameth")
+                end
             end
+            local timer = 0
             for i,v in pairs(workspace:GetChildren())do
                 if _G.PlayerJoined == true then
                     wait(0.05)
@@ -452,11 +503,13 @@ pcall(function()
                             spawn(check)
                             if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
                                 fireclickdetector(v.ClickDetector)
+                                timer = timer+1
                                 wait(0.1)
                             else
                                 player.Character:SetPrimaryPartCFrame(v.CFrame*CFrame.new(0,2,0))
                                 wait(0.15)
                                 fireclickdetector(v.ClickDetector)
+                                timer = timer+1
                                 wait(0.05)
                             end
                         end
@@ -464,13 +517,24 @@ pcall(function()
                 end
             end
             check()
+            if timer >= 2 then
+                spawn(function()
+                    wait(60)
+                    StarterGui:SetCore("SendNotification", {
+                        Title = "Castlerock Bot",
+                        Text = "Trinkets are ready",
+                        Duration = 13,
+                        Button1 = ""
+                    })
+                end)
+            end
             wait(0.05)
             player.Character:SetPrimaryPartCFrame(cf)
             wait()
             _G.CastleRock = false
         end
     end)
-
+    
     local droptelorumtoggle = CRO:NewToggle("Delete Telorum", "ToggleInfo",function(state)
         if state then
             droptelorum = true
@@ -492,6 +556,14 @@ pcall(function()
             droppd = true
         else
             droppd = false
+        end
+    end)
+
+    local dropscrollstoggle = CRO:NewToggle("Delete Scrolls", "ToggleInfo",function(state)
+        if state then
+            dropscrolls = true
+        else
+            dropscrolls = false
         end
     end)
     
