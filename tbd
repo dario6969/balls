@@ -70,7 +70,7 @@ pcall(function()
         for _,v in pairs(Player.Backpack:GetChildren())do
             if string.lower(v.Name):find(ins)then
                 Player.Character.Humanoid:EquipTool(v)
-                repeat wait()until Player.Character:FindFirstChild(v.Name) or not v
+                wait()
                 v:Destroy()
                 wait()
             end
@@ -499,6 +499,15 @@ pcall(function()
                                 wait(0.05)
                             end
                             check()
+                            if droppd then
+                                deletetool("phoenix down")
+                            end
+                            if dropice then
+                                deletetool("ice essence")
+                            end
+                            if droptelorum then
+                                deletetool("scroll of telorum")
+                            end
                             if dropscrolls then
                                 spawn(function()
                                     deletetool("Scroll")
@@ -612,10 +621,17 @@ pcall(function()
             if not name:find("medal")and not name:find("old")and not name:find("coin")and not name:find("gold")
             and not name:find("opal")and not name:find("sap")and not name:find("ruby")and not name:find("emer")
             and not name:find("diam")and not name:find("ame")and not name:find("goblet")and not name:find("scroll")and not name:find("amulet")then
+                local duration = 60
+                if name == "???"then
+                    duration = 15
+                end
+                if name == "phoenix down"or name == "ice essence"then
+                    duration = 25
+                end
                 StarterGui:SetCore("SendNotification", {
                     Title = "Artifact Spawned",
                     Text = Trinket.Name,
-                    Duration = 60,
+                    Duration = duration,
                     Button1 = ""
                 })
             end
