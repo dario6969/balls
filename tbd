@@ -460,7 +460,7 @@ callback = function()
             end
         end
         local starttick = tick()
-        for i = 1,3 do
+        for i = 1,1 do
             for _,v in pairs(workspace.CRLoot:GetChildren())do
                 if _G.PlayerJoined == true or _G.Bot == false then
                     stopbot(CF)
@@ -499,6 +499,31 @@ callback = function()
                 end
             end
         else
+            StarterGui:SetCore("SendNotification", {
+                Title = title,
+                Text = "no trinkets found",
+                Duration = 5,
+                Button1 = ""
+            });
+        end;
+        if options.delete.pd == true then
+            deletetool("phoenix")
+        end
+        if options.delete.ice == true then
+            deletetool("ice essence")
+        end
+        if options.delete.telorum == true then
+            deletetool("scroll of telorum")
+        end
+        if options.delete.scroll == true then
+            deletetool("scroll")
+            deletetool("old ring")
+            deletetool("opal")
+            deletetool("goblet")
+            deletetool("amulet")
+            deletetool("ameth")
+            deletetool("sapp")
+            deletetool("?")
         end
         wait()
         stopbot(CF)
