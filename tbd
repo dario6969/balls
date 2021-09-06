@@ -251,7 +251,7 @@ pcall(function()
                                     end
                                 end
                                 if not playertooclose then
-                                    if (v.Position-Player.Character.HumanoidRootPart.Position).Magnitude<10 then
+                                    if (v.Position-Player.Character.HumanoidRootPart.Position).Magnitude<9 then
                                         fireclickdetector(v.ClickDetector)
                                     else
                                         Player.Character:SetPrimaryPartCFrame(v.CFrame)
@@ -468,12 +468,9 @@ pcall(function()
                     end
                     if v:IsA("Part")then
                         if v:FindFirstChild("ClickDetector")then
-                            if (v.Position-sc).Magnitude<50 then
-                                if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
-                                    fireclickdetector(v.ClickDetector)
-                                    timer = timer+1
-                                    wait(0.1)
-                                end
+                            if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<9 then
+                                fireclickdetector(v.ClickDetector)
+                                timer = timer+1
                             end
                         end
                     end
@@ -489,8 +486,8 @@ pcall(function()
                 end
                 if v:IsA("Part")then
                     if v:FindFirstChild("ClickDetector")then
-                        if (v.Position-sc).Magnitude<50 then
-                            if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
+                        if (v.Position-sc).Magnitude<35 then
+                            if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<9 then
                                 fireclickdetector(v.ClickDetector)
                                 timer = timer+1
                                 wait(0.1)
@@ -501,6 +498,7 @@ pcall(function()
                                 timer = timer+1
                                 wait(0.05)
                             end
+                            check()
                             if dropscrolls then
                                 spawn(function()
                                     deletetool("Scroll")
@@ -765,7 +763,7 @@ pcall(function()
                                     end
                                 end
                                 if not playertooclose then
-                                    if (v.Position-Player.Character.HumanoidRootPart.Position).Magnitude<10 then
+                                    if (v.Position-Player.Character.HumanoidRootPart.Position).Magnitude<9 then
                                         fireclickdetector(v.ClickDetector)
                                     else
                                         Player.Character:SetPrimaryPartCFrame(v.CFrame)
