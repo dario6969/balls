@@ -227,6 +227,25 @@ spawn(function()
     end)
 end)
 
+---- Collector Detection
+
+for _,v in pairs(game.workspace:GetDescendants())do
+    if v.Name == "Collector"and v:FindFirstChild("Spawned")then
+        v.Spawned.Changed:Connect(function()
+            if v.Spawned.Value == true then
+                StarterGui:SetCore("SendNotification", {
+                    Title = title,
+                    Text = v.Parent.Name.." Spawned",
+                    Duration = 40,
+                    Button1 = ""
+                });
+            end
+        end)
+    end
+end
+
+---- Character
+
 local WalkSpeedEnabled = false
 local InfiniteJumpEnabled = false
 
