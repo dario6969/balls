@@ -46,8 +46,16 @@ pcall(function()
     local IsKeyDown = UserInputService.IsKeyDown
     local FindFirstChild = game.FindFirstChild
     local Player = game.Players.LocalPlayer
+
+    local deletingtools = false
     
     function deletetool(txt)
+        if deletingtools == true then
+            while deletingtools == true do
+                wait(0.05)
+            end
+        end
+        deletingtools = true
         local ins = string.lower(txt)
         if ins:find("?")then
             local questionmark = Player.Character:FindFirstChild("???") or Player.Backpack:FindFirstChild("???")
@@ -73,6 +81,7 @@ pcall(function()
                 wait()
             end
         end
+        deletingtools = false
     end
 
     local ppp = game.Players:GetPlayers()
@@ -323,13 +332,15 @@ pcall(function()
     local dropice = false
     local dropscrolls = false
     local droptelorum = false
+    local timer = 0
     
-    CR:NewButton("Castlerock Bot","ButtonInfo",function()
+    local crbotfunction = function()
         if not _G.CastleRock then
             _G.CastleRock = true
             local player = game.Players.LocalPlayer
             local cf = player.Character.HumanoidRootPart.CFrame
             local cframe = CFrame.new(5650.777,488.95,646.8)
+            timer = 0
             for i,v in pairs(workspace.Map:GetChildren())do
                 if v.Name:find("Kill")or v.Name:find("Lava")then
                     v:Destroy()
@@ -457,38 +468,6 @@ pcall(function()
                 _G.CastleRock = false
                 return
             end
-            function check()
-                for i,v in pairs(workspace:GetChildren())do
-                    if v:IsA("Part")then
-                        if v:FindFirstChildOfClass("ClickDetector")then
-                            if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
-                                fireclickdetector(v.ClickDetector)
-                                wait()
-                            end
-                        end
-                    end
-                end
-                if droppd then
-                    deletetool("Phoenix Down")
-                end
-                if dropice then
-                    deletetool("Ice Essence")
-                end
-                if droptelorum then
-                    deletetool("Scroll of Telorum")
-                end
-                if dropscrolls then
-                    deletetool("Scroll")
-                    deletetool("?")
-                    deletetool("opal")
-                    deletetool("old ring")
-                    deletetool("goblet")
-                    deletetool("amulet")
-                    deletetool("sapp")
-                    deletetool("ameth")
-                end
-            end
-            local timer = 0
             for i,v in pairs(workspace:GetChildren())do
                 if _G.PlayerJoined == true then
                     wait(0.05)
@@ -498,9 +477,8 @@ pcall(function()
                     return
                 end
                 if v:IsA("Part")then
-                    if v:FindFirstChildOfClass("ClickDetector")then
+                    if v:FindFirstChild("ClickDetector")then
                         if (v.Position-sc).Magnitude<50 then
-                            spawn(check)
                             if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
                                 fireclickdetector(v.ClickDetector)
                                 timer = timer+1
@@ -512,26 +490,45 @@ pcall(function()
                                 timer = timer+1
                                 wait(0.05)
                             end
+                            if dropscrolls then
+                                spawn(function()
+                                    deletetool("Scroll")
+                                    deletetool("?")
+                                    deletetool("opal")
+                                    deletetool("old ring")
+                                    deletetool("goblet")
+                                    deletetool("amulet")
+                                    deletetool("sapp")
+                                    deletetool("ameth")
+                                end)
+                            end
                         end
                     end
                 end
-            end
-            check()
-            if timer >= 2 then
-                spawn(function()
-                    wait(60)
-                    StarterGui:SetCore("SendNotification", {
-                        Title = "Castlerock Bot",
-                        Text = "Trinkets are ready",
-                        Duration = 13,
-                        Button1 = ""
-                    })
-                end)
             end
             wait(0.05)
             player.Character:SetPrimaryPartCFrame(cf)
             wait()
             _G.CastleRock = false
+        end
+    end
+    
+    local nigganuts = Instance.new("BindableFunction")
+    nigganuts.OnInvoke = crbotfunction
+    
+    CR:NewButton("Castlerock Bot","ButtonInfo",function()
+        crbotfunction()
+        if timer >= 2 then
+            spawn(function()
+                wait(60)
+                StarterGui:SetCore("SendNotification", {
+                    Title = "Castlerock Bot",
+                    Text = "Trinkets are ready",
+                    Duration = 13,
+                    Button1 = "Run CR",
+                    Callback = nigganuts
+                })
+            end)
         end
     end)
     
@@ -585,14 +582,14 @@ pcall(function()
             if yo == nil then
                 return
             end
-            game.Players.LocalPlayer:Kick("Serverhopping")
             game:GetService("TeleportService"):Teleport(6530895414)
+            game.Players.LocalPlayer:Kick("Serverhopping")
         end
     end)
 
     Character:NewButton("Rejoin","ButtonInfo",function()
-        Player:Kick("Rejoining")
         game:GetService("TeleportService"):Teleport(6530895414)
+        Player:Kick("Rejoining")
     end)
 
     -- Artifact Teleport/Notifier
