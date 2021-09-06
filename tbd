@@ -455,7 +455,7 @@ callback = function()
         local Check = function()
             for _,v in pairs(workspace:GetChildren())do
                 if v:IsA("Part")and v:FindFirstChild("ClickDetector")then
-                    if (v.Position-Character.PrimaryPart.Position).Magnitude<9 then
+                    if (v.Position-Character.PrimaryPart.Position).Magnitude<6.5 then
                         fireclickdetector(v.ClickDetector)
                         timer = timer+1
                     end
@@ -511,9 +511,9 @@ callback = function()
                     end
                     if not v.Name:find("Spawn")then
                         Character:SetPrimaryPartCFrame(v.CFrame*CFrame.new(0,2,0))
-                        wait(0.175)
+                        wait(0.156)
                         Check()
-                        wait(0.05)
+                        wait(0.04)
                     end
                 end
             end
