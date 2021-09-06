@@ -422,9 +422,9 @@ callback = function()
     end
     if _G.Bot == false then
         _G.Bot = true
+        timer = 0
         local CF = Character.PrimaryPart.CFrame
         local cframe = CFrame.new(5650.777,488.95,646.8)
-        timer = 0
         for _,v in pairs(workspace.Map:GetChildren())do
             if v.Name:find("Kill")or v.Name:find("Lava")then
                 v:Destroy()
@@ -478,7 +478,7 @@ callback = function()
             end
         end
         local starttick = tick()
-        for i = 1,1 do
+        for i = 1,2 do
             for _,v in pairs(workspace.CRLoot:GetChildren())do
                 if _G.PlayerJoined == true or _G.Bot == false then
                     stopbot(CF)
@@ -495,9 +495,8 @@ callback = function()
                 Character:SetPrimaryPartCFrame(workspace.TeleportIn.CFrame*CFrame.new(0,10,0))
                 wait(0.75)
                 Character:SetPrimaryPartCFrame(cframe)
-                wait(1.25)
+                wait(1.5)
             end
-            wait(0.35)
         end
         if foundtrinket == true then
             for _,v in pairs(workspace.CRLoot:GetChildren())do
@@ -507,14 +506,21 @@ callback = function()
                         return
                     end
                     if not v.Name:find("Spawn")then
-                        --if v.Transparency ~= 1 then
-                            Character:SetPrimaryPartCFrame(v.CFrame*CFrame.new(0,2,0))
-                            wait(0.1)
-                            Check()
-                            wait(0.075)
-                        --end
+                        Character:SetPrimaryPartCFrame(v.CFrame*CFrame.new(0,2,0))
+                        wait(0.1)
+                        Check()
+                        wait(0.075)
                     end
                 end
+            end
+            if timer > 2 then
+                wait(60)
+                StarterGui:SetCore("SendNotification", {
+                    Title = title,
+                    Text = "Castlerock Bot is ready",
+                    Duration = 15,
+                    Button1 = "",
+                })
             end
         else
             StarterGui:SetCore("SendNotification", {
@@ -656,6 +662,13 @@ callback = function()
     end
 end})
 
+OptionsTab:AddButton({text = "Rejoin",flag = "rejoin",
+callback = function()
+    game.Players.LocalPlayer:Kick()
+    wait(0.5)
+    game:GetService("TeleportService"):Teleport(6530895414)
+end})
+
 OptionsTab:AddButton({text = "Save Settings",flag = "save",
 callback = function()
     options.WalkspeedKey = Library.flags["walkspeedbind"]
@@ -711,13 +724,6 @@ end)
 OptionsTab:AddButton({text = "Load Settings",flag = "load",
 callback = function()
     loadsettings()
-end})
-
-OptionsTab:AddButton({text = "Rejoin",flag = "rejoin",
-callback = function()
-    game.Players.LocalPlayer:Kick()
-    wait(1)
-    game:GetService("TeleportService"):Teleport(game.PlaceId)
 end})
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/ic3w0lf22/Unnamed-ESP/master/UnnamedESP.lua",true))()
