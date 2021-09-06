@@ -514,13 +514,15 @@ callback = function()
                 end
             end
             if timer > 2 then
-                wait(60)
-                StarterGui:SetCore("SendNotification", {
-                    Title = title,
-                    Text = "Castlerock Bot is ready",
-                    Duration = 15,
-                    Button1 = "",
-                })
+                spawn(function()
+                    wait(60)
+                    StarterGui:SetCore("SendNotification", {
+                        Title = title,
+                        Text = "Castlerock Bot is ready",
+                        Duration = 15,
+                        Button1 = "",
+                    });
+                end)
             end
         else
             StarterGui:SetCore("SendNotification", {
