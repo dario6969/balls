@@ -1,856 +1,673 @@
-pcall(function()
-    if _G.Executed then
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "bruh",
-            Text = "you already executed the script retard!!",
-            Duration = 5,
-            Button1 = ""
-        })
-        return
-    end
-    for i,v in next,getconnections(game:GetService("ScriptContext").Error)do
-		v:Disable()
-	end
-    local function synCheck()
-        return tostring(string.char(math.random(97, 122)).." "..string.char(math.random(97, 122)).." "..string.char(math.random(97, 122)).." "..string.char(math.random(97, 122))..";")
-    end
+if _G.Executed then
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = title,
+        Text = "Already executed.",
+        Duration = 5,
+        Button1 = ""
+    })
+    return
+end
 
-    _G.Executed = true
-    local bruh = true
-    
-    local Library = loadstring(game:HttpGet("https://pastebin.com/raw/QsWfESYB"))()
-    local Window = Library.CreateLib("TBD")
-    local Local = Window:NewTab("Local")
-    local Character = Local:NewSection("Character")
-    
-    local TPTab = Window:NewTab("Teleports")
-    local TP = TPTab:NewSection("Areas")
+local title = "The Boundless Dimensions"
 
-    local KeybindsTab = Window:NewTab("Keybinds")
-    local Keybinds = KeybindsTab:NewSection("Keybinds")
+_G.Executed = true
 
-    local CRTab = Window:NewTab("Castlerock")
-    local CR = CRTab:NewSection("Bot")
-    local CRO = CRTab:NewSection("Options")
-    
-    local OtherTab = Window:NewTab("Other")
-    local Other = OtherTab:NewSection("Other")
+for _,v in next,getconnections(game:GetService("ScriptContext").Error)do
+    v:Disable()
+end
 
-    local Walkspeed = false
-    local InfiniteJump = false
-    
-    local CoreGui = game:GetService("CoreGui")
-    local StarterGui = game:GetService("StarterGui")
-    local UserInputService = game:GetService("UserInputService")
-    local RunService = game:GetService("RunService")
-    local IsKeyDown = UserInputService.IsKeyDown
-    local FindFirstChild = game.FindFirstChild
-    local Player = game.Players.LocalPlayer
-    
-    function deletetool(txt)
-        local ins = string.lower(txt)
-        if ins:find("?")then
-            local questionmark = Player.Character:FindFirstChild("???") or Player.Backpack:FindFirstChild("???")
+local Library = loadstring(game:HttpGet("https://pastebin.com/raw/edJT9EGX"))()
+local CharacterTab = Library:CreateWindow("Character")
+local CastlerockTab = Library:CreateWindow("Castlerock")
+local BotsTab = Library:CreateWindow("Bots")
+local TelportsTab = Library:CreateWindow("Teleports")
+local SlidersTab = Library:CreateWindow("Sliders")
+local KeybindsTab = Library:CreateWindow("Keybinds")
+local OptionsTab = Library:CreateWindow("Options")
+
+local HttpService = game:GetService("HttpService")
+local CoreGui = game:GetService("CoreGui")
+local StarterGui = game:GetService("StarterGui")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local IsKeyDown = UserInputService.IsKeyDown
+local FindFirstChild = game.FindFirstChild
+local Player = game.Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local path = "tbdgui.settings"
+
+_G.Bot = false
+
+Player.CharacterAdded:Connect(function(c)
+    Character = c
+end)
+
+function deletetool(txt)
+    local ins = string.lower(txt)
+    if ins:find("?")then
+        local questionmark = Character:FindFirstChild("???") or Player.Backpack:FindFirstChild("???")
+        if questionmark then
+            if questionmark.Parent == Player.Backpack then
+                Character.Humanoid:EquipTool(questionmark)
+                wait()
+            end
             if questionmark then
-                if questionmark.Parent == Player.Backpack then
-                    Player.Character.Humanoid:EquipTool(questionmark)
-                    wait()
-                end
-                if questionmark then
-                    questionmark:Destroy()
-                end
-                return
+                questionmark:Destroy()
             end
-        end
-        for _,v in pairs(Player.Character:GetChildren())do
-            if string.lower(v.Name):find(ins)then
-                v:Destroy()
-            end
-        end
-        for _,v in pairs(Player.Backpack:GetChildren())do
-            if string.lower(v.Name):find(ins)then
-                Player.Character.Humanoid:EquipTool(v)
-                wait()
-                v:Destroy()
-                wait()
-            end
-        end
-    end
-
-    local ppp = game.Players:GetPlayers()
-    if #ppp > 1 then
-        StarterGui:SetCore("SendNotification", {
-            Title = "TBD GUI",
-            Text = "There are "..#ppp.." players ingame",
-            Duration = 5,
-            Button1 = ""
-        })
-    end
-    
-    local Illutable = {}
-
-    -- Illu Check
-    
-    function illufunction(v)
-        if v ~= game.Players.LocalPlayer then
-            spawn(function()
-                local Sound = Instance.new("Sound")
-                Sound.Name = tostring(synCheck())
-                Sound.SoundId = "rbxassetid://180877191"
-                Sound.Volume = 6
-                Sound.Looped = false
-                Sound.Parent = CoreGui
-                Sound:Play()
-                wait(3)
-                Sound:Destroy()
-            end)
-            StarterGui:SetCore("SendNotification", {
-                Title = "Illusionist Detected",
-                Text = v.Name,
-                Duration = 60,
-                Button1 = ""
-            })
-            table.insert(Illutable,#Illutable+1,v)
-        end
-    end
-    
-    spawn(function()
-        for i,s in pairs(game.Players:GetDescendants())do
-            if s.Name == "Observe"then
-                if s.Parent.Parent:IsA("Player")then
-                    local v = s.Parent.Parent
-                    illufunction(v)
-                end
-            end
-            if s:IsA("Player")and s.Character then
-                if s.Character:FindFirstChild("Observe")then
-                    illufunction(v)
-                end
-            end
-        end
-        
-        game.Players.PlayerAdded:Connect(function(v)
-            if not Window then
-                return
-            end
-            _G.PlayerJoined = true
-            StarterGui:SetCore("SendNotification", {
-                Title = "Player Joined",
-                Text = v.Name,
-                Duration = 15,
-                Button1 = ""
-            })
-            wait(3)
-            _G.PlayerJoined = false
-            if v:FindFirstChild("Backpack"):FindFirstChild("Observe")then
-                illufunction(v)
-            end
-        end)
-        game.Players.PlayerRemoving:Connect(function(v)
-            if not Window then
-                return
-            end
-            StarterGui:SetCore("SendNotification", {
-                Title = "Player Left",
-                Text = v.Name,
-                Duration = 15,
-                Button1 = ""
-            })
-            _G.PlayerJoined = false
-            if table.find(Illutable,v)then
-                table.remove(Illutable,v)
-            end
-        end)
-    end)
-    
-    -- Start
-
-    local WS = 3
-    local JP = 50
-
-    -- Walkspeed
-
-    local walkspeedtoggle = Character:NewToggle("Walkspeed", "ToggleInfo", function(state)
-        if state then
-            Walkspeed = true
-            while Walkspeed == true do
-                if Player.Character and FindFirstChild(Player.Character,"HumanoidRootPart")and FindFirstChild(Player.Character,"Humanoid")then
-                    local Humanoid = Player.Character.Humanoid
-                    local HRP = Player.Character.HumanoidRootPart
-                    Player.Character:SetPrimaryPartCFrame(HRP.CFrame*CFrame.new(0,0,0)+Humanoid.MoveDirection*WS)
-                end
-                RunService.Stepped:Wait()
-            end
-        else
-            Walkspeed = false
-        end
-    end)
-
-    Character:NewSlider("Speed", "SliderInfo", 400, 100, function(s)
-        WS = s/100
-    end)
-
-    -- Infinite Jump
-
-    function Action(Object,Function)
-        if Object ~= nil then
-            Function(Object)
-        end
-    end
-
-    local infinitejumptoggle = Character:NewToggle("Infinite Jump", "ToggleInfo", function(state)
-        if state then
-            InfiniteJump = true
-            while InfiniteJump == true do
-                if IsKeyDown(UserInputService,Enum.KeyCode.Space)and Player.Character and FindFirstChild(Player.Character,"HumanoidRootPart")and FindFirstChild(Player.Character,"Humanoid")then
-                    Action(Player.Character.Humanoid,function(self)
-                        if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
-                            Action(self.Parent.HumanoidRootPart,function(self)
-                                self.Velocity = Vector3.new(self.Velocity.X,JP,self.Velocity.Z)
-                            end)
-                        end
-                    end)
-                end
-                wait()
-            end
-        else
-            InfiniteJump = false
-        end
-    end)
-
-    Character:NewSlider("Jumppower", "SliderInfo", 225, 35, function(s)
-        JP = s
-    end)
-
-    -- Snowshroom Bot
-
-    local Bot = false
-    
-    Other:NewButton("Silver Farm","ButtonInfo",function()
-        if Bot then return end
-        if not Bot then
-            spawn(function()
-                Bot = true
-                local playertooclose = false
-                local cf = Player.Character.HumanoidRootPart.CFrame
-                for i,v in pairs(workspace.Ingredients:GetChildren())do
-                    if _G.PlayerJoined == true then
-                        Bot = false
-                        break
-                    end
-                    if v.Name == "Snowshroom"or v.Name == "Crown Flower"then
-                        if v.Ready.Value == true then
-                            if v:FindFirstChild("ClickDetector")then
-                                for a,p in pairs(game.Players:GetChildren())do
-                                    if p~=Player then
-                                        if p.Character:FindFirstChild("HumanoidRootPart")then
-                                            if (p.Character.HumanoidRootPart.Position-v.Position).Magnitude<600 then
-                                                playertooclose = true
-                                            end
-                                        end
-                                    end
-                                end
-                                if not playertooclose then
-                                    if (v.Position-Player.Character.HumanoidRootPart.Position).Magnitude<9 then
-                                        fireclickdetector(v.ClickDetector)
-                                    else
-                                        Player.Character:SetPrimaryPartCFrame(v.CFrame)
-                                        wait(0.125)
-                                        fireclickdetector(v.ClickDetector)
-                                        wait()
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-                wait()
-                Player.Character:SetPrimaryPartCFrame(cf)
-                wait(1)
-                Bot = false
-            end)
-        end
-    end)
-
-    Other:NewButton("Loot all Trinkets","ButtonInfo",function()
-        if Bot then return end
-        if not Bot then
-            spawn(function()
-                Bot = true
-                local cf = Player.Character.HumanoidRootPart.CFrame
-                for i,v in pairs(workspace:GetChildren())do
-                    if _G.PlayerJoined == true then
-                        Bot = false
-                        break
-                    end
-                    if v:IsA("Part")then
-                        if v:FindFirstChild("ClickDetector")then
-                            for a,p in pairs(game.Players:GetChildren())do
-                                if p~=Player then
-                                    if p.Character:FindFirstChild("HumanoidRootPart")then
-                                        if (p.Character.HumanoidRootPart.Position-v.Position).Magnitude<600 then
-                                            playertooclose = true
-                                        end
-                                    end
-                                end
-                            end
-                            if not playertooclose then
-                                if (v.Position-Player.Character.HumanoidRootPart.Position).Magnitude<10 then
-                                    fireclickdetector(v.ClickDetector)
-                                else
-                                    Player.Character:SetPrimaryPartCFrame(v.CFrame)
-                                    wait(0.226)
-                                    fireclickdetector(v.ClickDetector)
-                                    wait()
-                                end
-                            end
-                        end
-                    end
-                end
-                wait()
-                Player.Character:SetPrimaryPartCFrame(cf)
-                wait(1)
-                Bot = false
-            end)
-        end
-    end)
-    
-    local function playercheck()
-        if game.Players:GetChildren()[2]then
-            return true
-        end
-    end
-
-    local droppd = false
-    local dropice = false
-    local dropscrolls = false
-    local droptelorum = false
-    local timer = 0
-    
-    local crbotfunction = function()
-        if not _G.CastleRock then
-            _G.CastleRock = true
-            local player = game.Players.LocalPlayer
-            local cf = player.Character.HumanoidRootPart.CFrame
-            local cframe = CFrame.new(5650.777,488.95,646.8)
-            timer = 0
-            for i,v in pairs(workspace.Map:GetChildren())do
-                if v.Name:find("Kill")or v.Name:find("Lava")then
-                    v:Destroy()
-                end
-            end
-            workspace.FallenPartsDestroyHeight = -1e9;
-            if workspace.InCR:FindFirstChild(player.Name)==nil then
-                player.Character:SetPrimaryPartCFrame(CFrame.new(4774.75, 531.45, 469.998))
-            end
-            local starttick = tick()
-            repeat wait()until workspace.InCR:FindFirstChild(player.Name)or tick()-starttick>5 or _G.PlayerJoined == true
-            if _G.PlayerJoined == true then
-                wait(0.05)
-                player.Character:SetPrimaryPartCFrame(cf)
-                wait(5)
-                _G.CastleRock = false
-                return
-            end
-            if tick()-starttick>5 then
-                wait(0.5)
-                _G.CastleRock = false
-                return
-            end
-            player.Character:SetPrimaryPartCFrame(cframe)
-            local sp = player.Character.HumanoidRootPart.Position
-            local sc = Vector3.new(5753.588, 321.882, 624.767)
-            wait()wait()
-            local foundtrinketincr = false
-        
-            local function spawntrinkets()
-                for i = 1,1 do
-                    if _G.PlayerJoined == true then
-                        _G.CastleRock = false
-                        break
-                    end
-                    for i,v in pairs(workspace:GetChildren())do
-                        if v:IsA("Part")then
-                            if v:FindFirstChildOfClass("ClickDetector")then
-                                if (v.Position-sc).Magnitude<50 then
-                                    foundtrinketincr = true
-                                    break
-                                end
-                            end
-                        end
-                    end
-                    if foundtrinketincr == true then
-                        break
-                    end
-                    player.Character:SetPrimaryPartCFrame(workspace.TeleportIn.CFrame*CFrame.new(0,20,0)*CFrame.Angles(0,math.rad(90),0))
-                    wait(1)
-                    for i,v in pairs(workspace:GetChildren())do
-                        if v:IsA("Part")then
-                            if v:FindFirstChildOfClass("ClickDetector")then
-                                if (v.Position-sc).Magnitude<50 then
-                                    foundtrinketincr = true
-                                    break
-                                end
-                            end
-                        end
-                    end
-                    if foundtrinketincr == true then
-                        break
-                    end
-                    player.Character:SetPrimaryPartCFrame(cframe)
-                    wait(0.5)
-                end
-            end
-        
-            spawntrinkets()
-        
-            wait(0.6)
-        
-            if _G.PlayerJoined == true then
-                wait(0.05)
-                player.Character:SetPrimaryPartCFrame(cf)
-                wait(5)
-                _G.CastleRock = false
-                return
-            end
-        
-            player.Character:SetPrimaryPartCFrame(cframe)
-        
-            if foundtrinketincr == false then
-                wait(0.5)
-                spawntrinkets()
-            end
-        
-            local starttick = tick()
-            repeat
-                wait(0.3)
-                if _G.PlayerJoined == true then
-                    wait(0.05)
-                    player.Character:SetPrimaryPartCFrame(cf)
-                    wait(1)
-                    _G.CastleRock = false
-                    return
-                end
-                for i,v in pairs(workspace:GetChildren())do
-                    if v:IsA("Part")then
-                        if v:FindFirstChildOfClass("ClickDetector")then
-                            if (v.Position-sc).Magnitude<50 then
-                                foundtrinketincr = true
-                            end
-                        end
-                    end
-                end
-            until foundtrinketincr == true or _G.PlayerJoined == true or tick()-starttick>1.25
-            if _G.PlayerJoined == true then
-                wait(0.05)
-                player.Character:SetPrimaryPartCFrame(cf)
-                wait(1)
-                _G.CastleRock = false
-                return
-            end
-            if tick()-starttick>1.25 then
-                wait(0.05)
-                player.Character:SetPrimaryPartCFrame(cf)
-                StarterGui:SetCore("SendNotification", {
-                    Title = "Castlerock Bot",
-                    Text = "No trinkets found",
-                    Duration = 3,
-                    Button1 = ""
-                })
-                wait(0.5)
-                _G.CastleRock = false
-                return
-            end
-            local check = function()
-                for i,v in pairs(workspace:GetChildren())do
-                    if _G.PlayerJoined == true then
-                        return
-                    end
-                    if v:IsA("Part")then
-                        if v:FindFirstChild("ClickDetector")then
-                            if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<9 then
-                                fireclickdetector(v.ClickDetector)
-                                timer = timer+1
-                            end
-                        end
-                    end
-                end
-            end
-            for i,v in pairs(workspace:GetChildren())do
-                if _G.PlayerJoined == true then
-                    wait(0.05)
-                    player.Character:SetPrimaryPartCFrame(cf)
-                    wait(1)
-                    _G.CastleRock = false
-                    return
-                end
-                if v:IsA("Part")then
-                    if v:FindFirstChild("ClickDetector")then
-                        if (v.Position-sc).Magnitude<35 then
-                            if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<9 then
-                                fireclickdetector(v.ClickDetector)
-                                timer = timer+1
-                                wait(0.1)
-                            else
-                                player.Character:SetPrimaryPartCFrame(v.CFrame*CFrame.new(0,2,0))
-                                wait(0.15)
-                                fireclickdetector(v.ClickDetector)
-                                timer = timer+1
-                                wait(0.05)
-                            end
-                            check()
-                            if droppd then
-                                deletetool("phoenix down")
-                            end
-                            if dropice then
-                                deletetool("ice essence")
-                            end
-                            if droptelorum then
-                                deletetool("scroll of telorum")
-                            end
-                            if dropscrolls then
-                                spawn(function()
-                                    deletetool("Scroll")
-                                    deletetool("?")
-                                    deletetool("opal")
-                                    deletetool("old ring")
-                                    deletetool("goblet")
-                                    deletetool("amulet")
-                                    deletetool("sapp")
-                                    deletetool("ameth")
-                                end)
-                            end
-                        end
-                    end
-                end
-            end
-            wait(0.05)
-            player.Character:SetPrimaryPartCFrame(cf)
-            wait()
-            _G.CastleRock = false
-        end
-    end
-    
-    local nigganuts = Instance.new("BindableFunction")
-    nigganuts.OnInvoke = crbotfunction
-    
-    CR:NewButton("Castlerock Bot","ButtonInfo",function()
-        crbotfunction()
-        if timer >= 2 then
-            spawn(function()
-                wait(60)
-                StarterGui:SetCore("SendNotification", {
-                    Title = "Castlerock Bot",
-                    Text = "Trinkets are ready",
-                    Duration = 13,
-                    Button1 = "Run CR",
-                    Callback = nigganuts
-                })
-            end)
-        end
-    end)
-    
-    local droptelorumtoggle = CRO:NewToggle("Delete Telorum", "ToggleInfo",function(state)
-        if state then
-            droptelorum = true
-        else
-            droptelorum = false
-        end
-    end)
-
-    local dropicetoggle = CRO:NewToggle("Delete Ice Essence", "ToggleInfo",function(state)
-        if state then
-            dropice = true
-        else
-            dropice = false
-        end
-    end)
-
-    local droppdtoggle = CRO:NewToggle("Delete Phoenix Down", "ToggleInfo",function(state)
-        if state then
-            droppd = true
-        else
-            droppd = false
-        end
-    end)
-
-    local dropscrollstoggle = CRO:NewToggle("Delete Scrolls", "ToggleInfo",function(state)
-        if state then
-            dropscrolls = true
-        else
-            dropscrolls = false
-        end
-    end)
-    
-    -- Serverhop
-    
-    Character:NewButton("Serverhop","ButtonInfo",function()
-        if game.Players:GetChildren()[2]then
-            game:GetService("StarterGui"):SetCore("PromptBlockPlayer",game.Players:GetChildren()[2])
-            local yo = false
-            repeat wait()until game.CoreGui.RobloxGui.PromptDialog:FindFirstChild("ContainerFrame")and
-            game.CoreGui.RobloxGui.PromptDialog:FindFirstChild("ContainerFrame"):FindFirstChild("ConfirmButton")
-            game.CoreGui.RobloxGui.PromptDialog:FindFirstChild("ContainerFrame"):FindFirstChild("ConfirmButton").MouseButton1Click:Connect(function()
-                yo = true
-            end)
-            game.CoreGui.RobloxGui.PromptDialog:FindFirstChild("ContainerFrame"):FindFirstChild("CancelButton").MouseButton1Click:Connect(function()
-                yo = nil
-            end)
-            repeat wait()until yo == true or yo == nil
-            if yo == nil then
-                return
-            end
-            game:GetService("TeleportService"):Teleport(6530895414)
-            game.Players.LocalPlayer:Kick("Serverhopping")
-        end
-    end)
-
-    Character:NewButton("Rejoin","ButtonInfo",function()
-        game:GetService("TeleportService"):Teleport(6530895414)
-        Player:Kick("Rejoining")
-    end)
-
-    -- Artifact Teleport/Notifier
-
-    local function TrinketAdded(Trinket)
-        if not Window then
             return
         end
-        local name = string.lower(Trinket.Name)
-        if not name:find("spawn")then
-            if not name:find("medal")and not name:find("old")and not name:find("coin")and not name:find("gold")
-            and not name:find("opal")and not name:find("sap")and not name:find("ruby")and not name:find("emer")
-            and not name:find("diam")and not name:find("ame")and not name:find("goblet")and not name:find("scroll")and not name:find("amulet")then
-                local duration = 60
-                if name == "???"then
-                    duration = 15
-                end
-                if name == "phoenix down"or name == "ice essence"then
-                    duration = 25
-                end
-                StarterGui:SetCore("SendNotification", {
-                    Title = "Artifact Spawned",
-                    Text = Trinket.Name,
-                    Duration = duration,
-                    Button1 = ""
-                })
+    end
+    for _,v in pairs(Character:GetChildren())do
+        if string.lower(v.Name):find(ins)then
+            v:Destroy()
+        end
+    end
+    for _,v in pairs(Player.Backpack:GetChildren())do
+        if string.lower(v.Name):find(ins)then
+            Character.Humanoid:EquipTool(v)
+            repeat wait()until v.Parent == Character or v == nil or not v
+            if not v or v ~= nil then
+                v:Destroy()
             end
         end
     end
+end
 
-    workspace.Trinkets.ChildAdded:Connect(TrinketAdded)
+local defaultoptions = {
+    Walkspeed = 2.5,
+    Jumppower = 40,
+    WalkspeedKey = "C",
+    JumppowerKey = "C",
+    disabledkeybinds = false,
+    delete = {
+        pd = false,
+        ice = false,
+        scroll = false,
+        telorum = false,
+    }
+};
 
-    Other:NewButton("Teleport to Artifacts","ButtonInfo",function()
-        for i,v in pairs(workspace.Trinkets:GetChildren())do
-            local str = string.lower(v.Name)
-            if not str:find("spawn")then
-                local no = false
-                if str:find("scroll")then
-                    no = true
-                elseif str:find("medal")then
-                    no = true
-                elseif str:find("old")then
-                    no = true
-                elseif str:find("coin")then
-                    no = true
-                elseif str:find("gold")then
-                    no = true
-                elseif str:find("goblet")then
-                    no = true
-                elseif str:find("amulet")then
-                    no = true
-                elseif str:find("opal")then
-                    no = true
-                elseif str:find("sap")then
-                    no = true
-                elseif str:find("ruby")then
-                    no = true
-                elseif str:find("emer")then
-                    no = true
-                elseif str:find("diam")then
-                    no = true
-                elseif str:find("ame")then
-                    no = true
-                else
-                end
-                if not no then
-                    for a,p in pairs(game.Players:GetChildren())do
-                        if p~=Player then
-                            if p.Character:FindFirstChild("HumanoidRootPart")then
-                                if (p.Character.HumanoidRootPart.Position-v.Position).Magnitude<250 then
-                                    StarterGui:SetCore("SendNotification", {
-                                        Title = "Player too close",
-                                        Text = "Can't teleport",
-                                        Duration = 60,
-                                        Button1 = ""
-                                    })
-                                    return
-                                end
-                            end
-                        end
-                    end
-                    Player.Character:SetPrimaryPartCFrame(v.CFrame)
-                    return
-                end
-            end
+local options = {
+    Walkspeed = 2.5,
+    Jumppower = 40,
+    WalkspeedKey = "C",
+    JumppowerKey = "C",
+    disabledkeybinds = false,
+    delete = {
+        pd = false,
+        ice = false,
+        scroll = false,
+        telorum = false,
+    }
+};
+
+local IngredientBot = function(list)
+    if _G.Bot then
+        _G.Bot = false
+        return
+    end
+    _G.Bot = true
+    local CF = Character.HumanoidRootPart.CFrame
+    local found = false
+    for _,v in pairs(workspace.Ingredients:GetChildren())do
+        if _G.PlayerJoined == true or _G.Bot == false then
+            _G.Bot = false
+            break
         end
-    end)
-
-    Other:NewButton("Artifact TP no ???","ButtonInfo",function()
-        for i,v in pairs(workspace.Trinkets:GetChildren())do
-            local str = string.lower(v.Name)
-            if not str:find("spawn")then
-                local no = false
-                if str:find("scroll")then
-                    no = true
-                elseif str:find("medal")then
-                    no = true
-                elseif str:find("old")then
-                    no = true
-                elseif str:find("coin")then
-                    no = true
-                elseif str:find("gold")then
-                    no = true
-                elseif str:find("goblet")then
-                    no = true
-                elseif str:find("amulet")then
-                    no = true
-                elseif str:find("opal")then
-                    no = true
-                elseif str:find("sap")then
-                    no = true
-                elseif str:find("ruby")then
-                    no = true
-                elseif str:find("emer")then
-                    no = true
-                elseif str:find("diam")then
-                    no = true
-                elseif str:find("ame")then
-                    no = true
-                elseif str:find("???")then
-                    no = true
-                else
-                end
-                if not no then
-                    for a,p in pairs(game.Players:GetChildren())do
-                        if p~=Player then
-                            if p.Character:FindFirstChild("HumanoidRootPart")then
-                                if (p.Character.HumanoidRootPart.Position-v.Position).Magnitude<250 then
-                                    StarterGui:SetCore("SendNotification", {
-                                        Title = "Player too close",
-                                        Text = "Can't teleport",
-                                        Duration = 60,
-                                        Button1 = ""
-                                    })
-                                    return
-                                end
-                            end
-                        end
-                    end
-                    Player.Character:SetPrimaryPartCFrame(v.CFrame)
-                    return
-                end
-            end
-        end
-    end)
-
-    Other:NewButton("Scroom and Lava Flower Farm","ButtonInfo",function()
-        if Bot then return end
-        if not Bot then
-            spawn(function()
-                Bot = true
-                local playertooclose = false
-                local cf = Player.Character.HumanoidRootPart.CFrame
-                for i,v in pairs(workspace.Ingredients:GetChildren())do
-                    if _G.PlayerJoined == true then
-                        Bot = false
-                        break
-                    end
-                    if v.Name == "Scroom"or v.Name == "Lava Flower"then
-                        if v.Ready.Value == true then
-                            if v:FindFirstChild("ClickDetector")then
-                                for a,p in pairs(game.Players:GetChildren())do
-                                    if p~=Player then
-                                        if p.Character:FindFirstChild("HumanoidRootPart")then
-                                            if (p.Character.HumanoidRootPart.Position-v.Position).Magnitude<600 then
-                                                playertooclose = true
-                                            end
-                                        end
-                                    end
-                                end
-                                if not playertooclose then
-                                    if (v.Position-Player.Character.HumanoidRootPart.Position).Magnitude<9 then
-                                        fireclickdetector(v.ClickDetector)
-                                    else
-                                        Player.Character:SetPrimaryPartCFrame(v.CFrame)
-                                        wait(0.125)
-                                        fireclickdetector(v.ClickDetector)
-                                        wait()
+        for _,ingredient in pairs(list)do
+            if v.Name == ingredient then
+                if v:FindFirstChild("Ready").Value then
+                    if v:FindFirstChild("ClickDetector")then
+                        local playertooclose = false
+                        for _,p in pairs(game.Players:GetChildren())do
+                            if p~=Player then
+                                if p.Character and p.Character:FindFirstChild("HumanoidRootPart")then
+                                    if (p.Character.HumanoidRootPart.Position-v.Position).Magnitude<600 then
+                                        playertooclose = true
                                     end
                                 end
                             end
                         end
+                        if not playertooclose then
+                            if (v.Position-Character.HumanoidRootPart.Position).Magnitude<9 then
+                                fireclickdetector(v.ClickDetector)
+                            else
+                                Character:SetPrimaryPartCFrame(v.CFrame)
+                                wait(0.125)
+                                fireclickdetector(v.ClickDetector)
+                                wait()
+                            end
+                        end
+                        found = true
                     end
                 end
-                wait()
-                Player.Character:SetPrimaryPartCFrame(cf)
-                wait(1)
-                Bot = false
-            end)
+            end
         end
-    end)
-    
-    Other:NewTextBox("Delete from Character","TextboxInfo",function(txt)
-        deletetool(txt)
-    end)
+    end
+    if not found then
+        StarterGui:SetCore("SendNotification", {
+            Title = title,
+            Text = "Not spawned",
+            Duration = 5,
+            Button1 = ""
+        })
+    end
+    Character:SetPrimaryPartCFrame(CF)
+    _G.Bot = false
+end
 
-    -- Teleports
+local ppp = game.Players:GetPlayers()
+if #ppp > 1 then
+    StarterGui:SetCore("SendNotification", {
+        Title = title,
+        Text = "There are "..#ppp.." players ingame",
+        Duration = 5,
+        Button1 = ""
+    })
+end
 
-    for i,v in pairs(workspace.Gates:GetChildren())do
-        local spl = string.split(v.Name, " ")
-        for i,v in pairs(spl) do
-            spl[i] = v:sub(1,1):upper() .. v:sub(2)
+function illufunction(v)
+    if v ~= Player then
+        spawn(function()
+            local Sound = Instance.new("Sound")
+            Sound.Name = tostring("nigganuts")
+            Sound.SoundId = "rbxassetid://180877191"
+            Sound.Volume = 6
+            Sound.Looped = false
+            Sound.Parent = CoreGui
+            Sound:Play()
+            wait(3)
+            Sound:Destroy()
+        end)
+        StarterGui:SetCore("SendNotification", {
+            Title = "Illusionist Detected",
+            Text = v.Name,
+            Duration = 60,
+            Button1 = ""
+        })
+    end
+end
+
+spawn(function()
+    for i,s in pairs(game.Players:GetDescendants())do
+        if s.Name == "Observe"then
+            if s.Parent.Parent:IsA("Player")then
+                local v = s.Parent.Parent
+                illufunction(v)
+            end
         end
-        local result = table.concat(spl, " ")
-        if result ~= "All Dark" then
-            TP:NewButton(result,"ButtonInfo",function()
-                Player.Character:SetPrimaryPartCFrame(v.CFrame)
-            end)
+        if s:IsA("Player")and s.Character then
+            if s.Character:FindFirstChild("Observe")then
+                illufunction(v)
+            end
         end
     end
     
-    -- Keybinds
-
-    local nokeybinds = false
-    
-    Keybinds:NewKeybind("Hide UI", "KeybindInfo", Enum.KeyCode.Insert, function()
-        Library:ToggleUI()
-    end)
-
-    Keybinds:NewKeybind("Walkspeed", "KeybindInfo", Enum.KeyCode.C, function()
-        if Walkspeed then
-            walkspeedtoggle:UpdateToggle("Walkspeed",false)
-        else
-            if nokeybinds then return end
-            walkspeedtoggle:UpdateToggle("Walkspeed","Toggled On")
+    game.Players.PlayerAdded:Connect(function(v)
+        _G.PlayerJoined = true
+        StarterGui:SetCore("SendNotification", {
+            Title = "Player Joined",
+            Text = v.Name,
+            Duration = 15,
+            Button1 = ""
+        })
+        wait(3)
+        _G.PlayerJoined = false
+        if v:FindFirstChild("Backpack"):FindFirstChild("Observe")then
+            illufunction(v)
         end
     end)
-
-    Keybinds:NewKeybind("Infinite Jump", "KeybindInfo", Enum.KeyCode.C, function()
-        if InfiniteJump then
-            infinitejumptoggle:UpdateToggle("Infinite Jump",false)
-        else
-            if nokeybinds then return end
-            infinitejumptoggle:UpdateToggle("Infinite Jump","Toggled On")
-        end
+    game.Players.PlayerRemoving:Connect(function(v)
+        StarterGui:SetCore("SendNotification", {
+            Title = "Player Left",
+            Text = v.Name,
+            Duration = 15,
+            Button1 = ""
+        })
+        _G.PlayerJoined = false
     end)
-    
-    local disablekeybinds = Keybinds:NewToggle("Disable Keybinds", "ToggleInfo", function(state)
-        if state then
-            nokeybinds = true
-        else
-            nokeybinds = false
-        end
-    end)
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/ic3w0lf22/Unnamed-ESP/master/UnnamedESP.lua",true))()
 end)
+
+local WalkSpeedEnabled = false
+local InfiniteJumpEnabled = false
+
+local Speed = function(state)
+    if state then
+        WalkSpeedEnabled = true
+        while WalkSpeedEnabled == true do
+            Character:SetPrimaryPartCFrame(Character.PrimaryPart.CFrame+Character.Humanoid.MoveDirection*options.Walkspeed)
+            RunService.Stepped:Wait()
+        end
+    else
+        WalkSpeedEnabled = false
+    end
+end
+
+function Action(Object,Function)
+    if Object ~= nil then
+        Function(Object)
+    end
+end
+
+local Jump = function(state)
+    if state then
+        InfiniteJumpEnabled = true
+        while InfiniteJumpEnabled == true do
+            if IsKeyDown(UserInputService,Enum.KeyCode.Space)and Character and FindFirstChild(Character,"Humanoid")then
+                Action(Player.Character.Humanoid,function(self)
+                    if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
+                        Action(self.Parent.HumanoidRootPart,function(self)
+                            self.Velocity = Vector3.new(self.Velocity.X,options.Jumppower,self.Velocity.Z)
+                        end)
+                    end
+                end)
+            end
+            RunService.Stepped:Wait()
+        end
+    else
+        InfiniteJumpEnabled = false
+    end
+end
+
+local SpeedToggle = CharacterTab:AddToggle({text = "Walkspeed",flag = "walkspeed",state = false,
+callback = function(state)
+    Speed(state)
+end})
+
+local JumpToggle = CharacterTab:AddToggle({text = "Infinite Jump",flag = "infinitejump",state = false,
+callback = function(state)
+    Jump(state)
+end})
+
+---- Keybinds
+
+local wskeybind = KeybindsTab:AddBind({text = "Walkspeed",flag = "walkspeedbind",key = options.WalkspeedKey,
+callback = function(state)
+    if WalkSpeedEnabled then
+        SpeedToggle:SetState(false)
+    else
+        if options.disabledkeybinds == true then
+            return
+        end
+        SpeedToggle:SetState(true)
+    end
+end})
+
+local jpkeybind = KeybindsTab:AddBind({text = "Infinite Jump",flag = "jumppowerbind",key = options.WalkspeedKey,
+callback = function(state)
+    if WalkSpeedEnabled then
+        JumpToggle:SetState(false)
+    else
+        if options.disabledkeybinds == true then
+            return
+        end
+        JumpToggle:SetState(true)
+    end
+end})
+
+---- Sliders
+
+local walkspeedslider = SlidersTab:AddSlider({text = "Walkspeed", flag = "walkspeedslider", value = options.Walkspeed*10, min = 5, max = 40, float = 0.5,
+callback = function(number)
+    options.Walkspeed = number/10
+end})
+
+local jumppowerslider = SlidersTab:AddSlider({text = "Jumppower", flag = "jumppowerslider", value = options.Jumppower, min = 30, max = 80, float = 0.5,
+callback = function(number)
+    options.Jumppower = number
+end})
+
+---- Teleports
+
+local Desert = TelportsTab:AddFolder("Desert")
+local Forest = TelportsTab:AddFolder("Forest")
+local Tundra = TelportsTab:AddFolder("Tundra")
+local Deepforest = TelportsTab:AddFolder("Deepforest")
+local Other = TelportsTab:AddFolder("Other")
+
+for _,v in pairs(workspace.Gates:GetChildren())do
+    local spl = string.split(v.Name, " ")
+    for i,v in pairs(spl) do
+        spl[i] = v:sub(1,1):upper() .. v:sub(2)
+    end
+    local result = table.concat(spl, " ")
+    if result ~= "All Dark" then
+        if result:find("Desert")then
+            Desert:AddButton({text = result,flag = result,
+            callback = function()
+                if _G.Bot then
+                    _G.Bot = false
+                    return
+                end
+                Character:SetPrimaryPartCFrame(v.CFrame)
+            end})
+        elseif result:find("Forest")then
+            Forest:AddButton({text = result,flag = result,
+            callback = function()
+                if _G.Bot then
+                    _G.Bot = false
+                    return
+                end
+                Character:SetPrimaryPartCFrame(v.CFrame)
+            end})
+        elseif result:find("Tundra")then
+            Tundra:AddButton({text = result,flag = result,
+            callback = function()
+                if _G.Bot then
+                    _G.Bot = false
+                    return
+                end
+                Character:SetPrimaryPartCFrame(v.CFrame)
+            end})
+        elseif result:find("Deepforest")then
+            Deepforest:AddButton({text = result,flag = result,
+            callback = function()
+                if _G.Bot then
+                    _G.Bot = false
+                    return
+                end
+                Character:SetPrimaryPartCFrame(v.CFrame)
+            end})
+        else
+            Other:AddButton({text = result,flag = result,
+            callback = function()
+                if _G.Bot then
+                    _G.Bot = false
+                    return
+                end
+                Character:SetPrimaryPartCFrame(v.CFrame)
+            end})
+        end
+    end
+end
+
+---- Castlerock
+
+local stopbot = function(CF)
+    Character:SetPrimaryPartCFrame(CF)
+    wait(3)
+    _G.Bot = false
+end
+
+CastlerockTab:AddButton({text = "Castlerock Bot",flag = "castlerock",
+callback = function()
+    if _G.Bot then
+        _G.Bot = false
+        return
+    end
+    if _G.Bot == false then
+        _G.Bot = true
+        local CF = Character.PrimaryPart.CFrame
+        local cframe = CFrame.new(5650.777,488.95,646.8)
+        timer = 0
+        for _,v in pairs(workspace.Map:GetChildren())do
+            if v.Name:find("Kill")or v.Name:find("Lava")then
+                v:Destroy()
+            end
+        end
+        workspace.FallenPartsDestroyHeight = -1e9;
+        if workspace.InCR:FindFirstChild(Player.Name)==nil then
+            Character:SetPrimaryPartCFrame(CFrame.new(4774.75, 531.45, 469.998))
+        end
+        local starttick = tick()
+        repeat wait()until workspace.InCR:FindFirstChild(Player.Name)or tick()-starttick>4 or _G.PlayerJoined == true
+        if _G.PlayerJoined == true then
+            stopbot(CF)
+            return
+        end
+        if tick()-starttick>4 then
+            stopbot(CF)
+            return
+        end
+        Character:SetPrimaryPartCFrame(cframe)
+        local MagnitudeCheck = Vector3.new(5753.588, 321.882, 624.767)
+        wait()
+        local foundtrinket = false
+        local Check = function()
+            for _,v in pairs(workspace:GetChildren())do
+                if v:IsA("Part")and v:FindFirstChild("ClickDetector")then
+                    if (v.Position-Character.PrimaryPart.Position).Magnitude<9 then
+                        fireclickdetector(v.ClickDetector)
+                        timer = timer+1
+                    end
+                end
+            end
+            if options.delete.pd == true then
+                deletetool("phoenix")
+            end
+            if options.delete.ice == true then
+                deletetool("ice essence")
+            end
+            if options.delete.telorum == true then
+                deletetool("scroll of telorum")
+            end
+            if options.delete.scroll == true then
+                deletetool("scroll")
+                deletetool("old ring")
+                deletetool("opal")
+                deletetool("goblet")
+                deletetool("amulet")
+                deletetool("ameth")
+                deletetool("sapp")
+                deletetool("?")
+            end
+        end
+        local starttick = tick()
+        for i = 1,3 do
+            for _,v in pairs(workspace.CRLoot:GetChildren())do
+                if _G.PlayerJoined == true or _G.Bot == false then
+                    stopbot(CF)
+                    return
+                end
+                if not v.Name:find("Spawn")then
+                    foundtrinket = true
+                end
+                if foundtrinket == true then
+                    break
+                end
+            end
+            if foundtrinket == false then
+                Character:SetPrimaryPartCFrame(workspace.TeleportIn.CFrame*CFrame.new(0,10,0))
+                wait(0.75)
+                Character:SetPrimaryPartCFrame(cframe)
+                wait(1.25)
+            end
+            wait(0.35)
+        end
+        if foundtrinket == true then
+            for _,v in pairs(workspace.CRLoot:GetChildren())do
+                if v and v.Parent and v.Parent == workspace.CRLoot then
+                    if _G.PlayerJoined == true or _G.Bot == false then
+                        stopbot(CF)
+                        return
+                    end
+                    if not v.Name:find("Spawn")then
+                        --if v.Transparency ~= 1 then
+                            Character:SetPrimaryPartCFrame(v.CFrame*CFrame.new(0,2,0))
+                            wait(0.1)
+                            Check()
+                            wait(0.075)
+                        --end
+                    end
+                end
+            end
+        else
+        end
+        wait()
+        stopbot(CF)
+    end
+end})
+
+local pd = CastlerockTab:AddToggle({text = "Delete Phoenix Down",flag = "pd",state = options.delete.pd,
+callback = function(state)
+    options.delete.pd = state
+end})
+local ice = CastlerockTab:AddToggle({text = "Delete Ice Essence",flag = "ice",state = options.delete.ice,
+callback = function(state)
+    options.delete.ice = state
+end})
+local telorum = CastlerockTab:AddToggle({text = "Delete Telorum",flag = "telorum",state = options.delete.telorum,
+callback = function(state)
+    options.delete.telorum = state
+end})
+local scroll = CastlerockTab:AddToggle({text = "Delete Scrolls",flag = "scrolls",state = options.delete.scrolls,
+callback = function(state)
+    options.delete.scroll = state
+end})
+
+---- Bots
+
+local TrinketCheck = function()
+    for _,v in pairs(workspace:GetChildren())do
+        if v:IsA("Part")and v:FindFirstChild("ClickDetector")then
+            if (v.Position-Character.PrimaryPart.Position).Magnitude<9 then
+                fireclickdetector(v.ClickDetector)
+            end
+        end
+    end
+end
+
+BotsTab:AddButton({text = "Trinket Farm",flag = "trinketfarm",
+callback = function()
+    if _G.Bot then
+        _G.Bot = false
+        return
+    end
+    _G.Bot = true
+    local CF = Character.HumanoidRootPart.CFrame
+    local found = false
+    for _,v in pairs(workspace.Trinkets:GetChildren())do
+        if _G.PlayerJoined == true or _G.Bot == false then
+            stopbot(CF)
+            return
+        end
+        if not v.Name:find("Spawn")then
+            found = true
+            Character:SetPrimaryPartCFrame(v.CFrame*CFrame.new(0,2,0))
+            wait(0.21)
+            TrinketCheck()
+            wait()
+        end
+    end
+    if not found then
+        StarterGui:SetCore("SendNotification", {
+            Title = title,
+            Text = "no trinkets found",
+            Duration = 5,
+            Button1 = ""
+        })
+    end;
+    Character:SetPrimaryPartCFrame(CF)
+    _G.Bot = false
+end})
+
+BotsTab:AddButton({text = "Silver Farm",flag = "silverfarm",
+callback = function()
+    IngredientBot({"Snowshroom","Crown Flower"})
+end})
+
+BotsTab:AddBox({text = "Ingredient Bot",flag = "ingredient",value = "",
+callback = function(text)
+    IngredientBot({text})
+end})
+
+----------------------------------------------------------------------------------------------------------------------
+
+KeybindsTab:AddBind({text = "Toggle UI",key = "Insert",
+callback = function()
+    Library:Close()
+end})
+
+---- Options
+
+OptionsTab:AddButton({text = "Serverhop",flag = "serverhop",
+callback = function()
+    local Players = game.Players:GetChildren()
+    local blockplayer = math.random(2,#Players)
+    if Players[blockplayer] then
+        game:GetService("StarterGui"):SetCore("PromptBlockPlayer",Players[blockplayer])
+        local yo = false
+        repeat wait()until game.CoreGui.RobloxGui.PromptDialog:FindFirstChild("ContainerFrame")and
+        game.CoreGui.RobloxGui.PromptDialog:FindFirstChild("ContainerFrame"):FindFirstChild("ConfirmButton")
+        game.CoreGui.RobloxGui.PromptDialog:FindFirstChild("ContainerFrame"):FindFirstChild("ConfirmButton").MouseButton1Click:Connect(function()
+            yo = true
+        end)
+        game.CoreGui.RobloxGui.PromptDialog:FindFirstChild("ContainerFrame"):FindFirstChild("CancelButton").MouseButton1Click:Connect(function()
+            yo = nil
+        end)
+        repeat wait()until yo == true or yo == nil
+        if yo == nil then
+            return
+        end
+        game:GetService("TeleportService"):Teleport(6530895414)
+        game.Players.LocalPlayer:Kick("Serverhopping")
+    end
+end})
+
+OptionsTab:AddButton({text = "Save Settings",flag = "save",
+callback = function()
+    options.WalkspeedKey = Library.flags["walkspeedbind"]
+    options.JumppowerKey = Library.flags["jumppowerbind"]
+    writefile(path,HttpService:JSONEncode(options))
+end})
+
+local disabledkeybinds = KeybindsTab:AddToggle({text = "Disable Keybinds",flag = "keybindsdisabled",state = options.disabledkeybinds,
+callback = function(state)
+    options.disabledkeybinds = state
+end})
+
+local loadsettings = function()
+    if not isfile(path) then 
+        writefile(path,HttpService:JSONEncode(defaultoptions))
+    end
+    local str = readfile(path)
+    local Decoded = HttpService:JSONDecode(str)
+    if typeof(Decoded) ~= "table" then
+        writefile(path,HttpService:JSONEncode(defaultoptions))
+        HttpService:JSONDecode(str)
+        options = Decoded
+    else
+        options = Decoded
+    end
+    for i,v in pairs(defaultoptions)do
+        if not options[i]then
+            options = defaultoptions
+            writefile(path,HttpService:JSONEncode(defaultoptions))
+        end
+    end
+    disabledkeybinds:SetState(options.disabledkeybinds)
+    walkspeedslider:SetValue(options.Walkspeed*10)
+    jumppowerslider:SetValue(options.Jumppower)
+    wskeybind:SetKey(options.WalkspeedKey)
+    jpkeybind:SetKey(options.JumppowerKey)
+
+    pd:SetState(options.delete.pd)
+    ice:SetState(options.delete.ice)
+    scroll:SetState(options.delete.scroll)
+    telorum:SetState(options.delete.telorum)
+    return true
+end
+
+pcall(function()
+    local loaded = loadsettings()
+    while not loaded do
+        wait()
+        loaded = loadsettings()
+    end
+end)
+
+OptionsTab:AddButton({text = "Load Settings",flag = "load",
+callback = function()
+    loadsettings()
+end})
+
+OptionsTab:AddButton({text = "Rejoin",flag = "rejoin",
+callback = function()
+    game.Players.LocalPlayer:Kick()
+    wait(1)
+    game:GetService("TeleportService"):Teleport(game.PlaceId)
+end})
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ic3w0lf22/Unnamed-ESP/master/UnnamedESP.lua",true))()
+
+Library:Init()
