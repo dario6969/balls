@@ -279,6 +279,13 @@ callback = function(state)
     Jump(state)
 end})
 
+CharacterTab:AddBox({text = "Delete Tool",flag = "deletetool",value = "",
+callback = function(text)
+    if text ~= "" then
+        deletetool(text)
+    end
+end})
+
 ---- Keybinds
 
 local wskeybind = KeybindsTab:AddBind({text = "Walkspeed",flag = "walkspeedbind",key = options.WalkspeedKey,
@@ -568,7 +575,9 @@ end})
 
 BotsTab:AddBox({text = "Ingredient Bot",flag = "ingredient",value = "",
 callback = function(text)
-    IngredientBot({text})
+    if text ~= "" then
+        IngredientBot({text})
+    end
 end})
 
 ----------------------------------------------------------------------------------------------------------------------
