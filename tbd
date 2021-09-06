@@ -46,16 +46,8 @@ pcall(function()
     local IsKeyDown = UserInputService.IsKeyDown
     local FindFirstChild = game.FindFirstChild
     local Player = game.Players.LocalPlayer
-
-    local deletingtools = false
     
     function deletetool(txt)
-        if deletingtools == true then
-            while deletingtools == true do
-                wait(0.05)
-            end
-        end
-        deletingtools = true
         local ins = string.lower(txt)
         if ins:find("?")then
             local questionmark = Player.Character:FindFirstChild("???") or Player.Backpack:FindFirstChild("???")
@@ -64,7 +56,9 @@ pcall(function()
                     Player.Character.Humanoid:EquipTool(questionmark)
                     wait()
                 end
-                questionmark:Destroy()
+                if questionmark then
+                    questionmark:Destroy()
+                end
                 return
             end
         end
@@ -76,12 +70,11 @@ pcall(function()
         for _,v in pairs(Player.Backpack:GetChildren())do
             if string.lower(v.Name):find(ins)then
                 Player.Character.Humanoid:EquipTool(v)
-                repeat wait()until Player.Character:FindFirstChild(v.Name)
+                repeat wait()until Player.Character:FindFirstChild(v.Name) or not v
                 v:Destroy()
                 wait()
             end
         end
-        deletingtools = false
     end
 
     local ppp = game.Players:GetPlayers()
@@ -467,6 +460,24 @@ pcall(function()
                 wait(0.5)
                 _G.CastleRock = false
                 return
+            end
+            local check = function()
+                for i,v in pairs(workspace:GetChildren())do
+                    if _G.PlayerJoined == true then
+                        return
+                    end
+                    if v:IsA("Part")then
+                        if v:FindFirstChild("ClickDetector")then
+                            if (v.Position-sc).Magnitude<50 then
+                                if (v.Position-player.Character.HumanoidRootPart.Position).Magnitude<10 then
+                                    fireclickdetector(v.ClickDetector)
+                                    timer = timer+1
+                                    wait(0.1)
+                                end
+                            end
+                        end
+                    end
+                end
             end
             for i,v in pairs(workspace:GetChildren())do
                 if _G.PlayerJoined == true then
