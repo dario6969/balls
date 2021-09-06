@@ -1,3 +1,4 @@
+local title = "The Boundless Dimensions"
 if _G.Executed then
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = title,
@@ -7,8 +8,6 @@ if _G.Executed then
     })
     return
 end
-
-local title = "The Boundless Dimensions"
 
 _G.Executed = true
 
