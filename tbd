@@ -231,7 +231,7 @@ end)
 
 for _,v in pairs(game.workspace:GetDescendants())do
     if v.Name == "Collector"and v:FindFirstChild("Spawned")then
-        v.Spawned.Changed:Connect(function()
+        local spawnedcheck = function()
             if v.Spawned.Value == true then
                 StarterGui:SetCore("SendNotification", {
                     Title = title,
@@ -240,6 +240,10 @@ for _,v in pairs(game.workspace:GetDescendants())do
                     Button1 = ""
                 });
             end
+        end
+        spawnedcheck()
+        v.Spawned.Changed:Connect(function()
+            spawnedcheck()
         end)
     end
 end
@@ -507,9 +511,9 @@ callback = function()
                     end
                     if not v.Name:find("Spawn")then
                         Character:SetPrimaryPartCFrame(v.CFrame*CFrame.new(0,2,0))
-                        wait(0.1)
+                        wait(0.175)
                         Check()
-                        wait(0.075)
+                        wait(0.05)
                     end
                 end
             end
